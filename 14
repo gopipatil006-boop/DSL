@@ -1,0 +1,79 @@
+class Node:
+    def _init_(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+class BST:
+    def _init_(self):
+        self.root = None
+
+    def insert(self, root, data):
+        if root is None:
+            return Node(data)
+        if data < root.data:
+            root.left = self.insert(root.left, data)
+        else:
+            root.right = self.insert(root.right, data)
+        return root
+
+    def inorder(self, root):
+        if root:
+            self.inorder(root.left)
+            print(root.data, end=" ")
+            self.inorder(root.right)
+
+    def mirror(self, root):
+        if root:
+            root.left, root.right = root.right, root.left
+            self.mirror(root.left)
+            self.mirror(root.right)
+
+    def copy_tree(self, root):
+        if root is None:
+            return None
+        new_root = Node(root.data)
+        new_root.left = self.copy_tree(root.left)
+        new_root.right = self.copy_tree(root.right)
+        return new_root
+
+    def depth(self, root):
+        if root is None:
+            return 0
+        return 1 + max(self.depth(root.left), self.depth(root.right))
+
+bst = BST()
+copy_bst = None
+
+while True:
+    print("\n1.Insert  2.Display Mirror Image  3.Create Copy  4.Display Depth  5.Display Inorder  6.Exit")
+    ch = int(input("Enter choice: "))
+    if ch == 1:
+        val = int(input("Enter value: "))
+        bst.root = bst.insert(bst.root, val)
+    elif ch == 2:
+        if bst.root:
+            bst.mirror(bst.root)
+            print("Mirror Image (Inorder): ", end="")
+            bst.inorder(bst.root)
+            print()
+            bst.mirror(bst.root)  # Restore original tree
+        else:
+            print("Tree is empty")
+    elif ch == 3:
+        copy_bst = bst.copy_tree(bst.root)
+        print("Copy of BST created successfully.")
+    elif ch == 4:
+        print("Depth of tree:", bst.depth(bst.root))
+    elif ch == 5:
+        print("Inorder Traversal:", end=" ")
+        bst.inorder(bst.root)
+        print()
+        if copy_bst:
+            print("Copied BST Inorder:", end=" ")
+            bst.inorder(copy_bst)
+            print()
+    elif ch == 6:
+        break
+    else:
+        print("Invalid choice")
