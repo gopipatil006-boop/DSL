@@ -1,0 +1,48 @@
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+
+struct Student {
+    int id;
+    char name[50];
+    float cgpa;
+};
+
+Student* addStudent(Student* students, int &n) {
+    students = (Student*)realloc(students, (n + 1) * sizeof(Student));
+    cout << "Enter ID, Name, CGPA: ";
+    cin >> students[n].id >> students[n].name >> students[n].cgpa;
+    n++;
+    return students;
+}
+
+int linearSearch(Student* students, int n, int key) {
+    for (int i = 0; i < n; i++)
+        if (students[i].id == key)
+            return i;
+    return -1;
+}
+
+int main() {
+    Student* students = nullptr;
+    int n = 0, choice, key;
+    while (true) {
+        cout << "1. Add Student\n2. Search Student\n3. Exit\nEnter choice: ";
+        cin >> choice;
+        if (choice == 1)
+            students = addStudent(students, n);
+        else if (choice == 2) {
+            cout << "Enter ID to search: ";
+            cin >> key;
+            int index = linearSearch(students, n, key);
+            if (index != -1)
+                cout << "Found: " << students[index].id << " " << students[index].name << " " << students[index].cgpa << endl;
+            else
+                cout << "Record not found\n";
+        } else if (choice == 3)
+            break;
+    }
+    free(students);
+    return 0;
+}
