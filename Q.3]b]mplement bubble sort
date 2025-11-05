@@ -1,0 +1,42 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    int id;
+    string name;
+    float cgpa;
+};
+
+void addStudents(Student* &students, int &n) {
+    cout << "Enter number of students: ";
+    cin >> n;
+    students = new Student[n];
+    for (int i = 0; i < n; i++) {
+        cout << "Enter ID, Name, CGPA: ";
+        cin >> students[i].id >> students[i].name >> students[i].cgpa;
+    }
+}
+
+void bubbleSortByName(Student* students, int n) {
+    for (int i = 0; i < n - 1; i++)
+        for (int j = 0; j < n - i - 1; j++)
+            if (students[j].name > students[j + 1].name)
+                swap(students[j], students[j + 1]);
+}
+
+void displayStudents(Student* students, int n) {
+    for (int i = 0; i < n; i++)
+        cout << students[i].id << " " << students[i].name << " " << students[i].cgpa << endl;
+}
+
+int main() {
+    Student* students = nullptr;
+    int n;
+    addStudents(students, n);
+    bubbleSortByName(students, n);
+    cout << "\nSorted Student List (by Name):\n";
+    displayStudents(students, n);
+    delete[] students;
+    return 0;
+}
