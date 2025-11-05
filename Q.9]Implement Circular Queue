@@ -1,0 +1,45 @@
+#include <iostream>
+using namespace std;
+
+#define SIZE 5
+
+struct CircularQueue {
+    int arr[SIZE];
+    int front, rear;
+    CircularQueue() {
+        front = -1;
+        rear = -1;
+    }
+    bool isFull() {
+        return (front == 0 && rear == SIZE - 1) || (rear + 1 == front);
+    }
+    bool isEmpty() {
+        return front == -1;
+    }
+    void enqueue(int value) {
+        if (isFull()) {
+            cout << "Queue is Full\n";
+            return;
+        }
+        if (front == -1)
+            front = 0;
+        rear = (rear + 1) % SIZE;
+        arr[rear] = value;
+    }
+    void dequeue() {
+        if (isEmpty()) {
+            cout << "Queue is Empty\n";
+            return;
+        }
+        if (front == rear)
+            front = rear = -1;
+        else
+            front = (front + 1) % SIZE;
+    }
+    void display() {
+        if (isEmpty()) {
+            cout << "Queue is Empty\n";
+            return;
+        }
+        int i = front;
+        while (true) {
