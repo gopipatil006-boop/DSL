@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+void insertAtBegin(Node* &head, int value) {
+    Node* newNode = new Node;
+    newNode->data = value;
+    newNode->next = head;
+    head = newNode;
+}
+
+void deleteFromBegin(Node* &head) {
+    if (head == nullptr) return;
+    Node* temp = head;
+    head = head->next;
+    delete temp;
+}
+
+void display(Node* head) {
+    Node* temp = head;
+    while (temp != nullptr) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+int countElements(Node* head) {
+    int count = 0;
+    Node* temp = head;
+    while (temp != nullptr) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+int main() {
+    Node* head = nullptr;
+    int choice, value;
+    while (true) {
+        cout << "1. Insert at Begin\n2. Delete from Begin\n3. Display\n4. Count\n5. Exit\nEnter choice: ";
+        cin >> choice;
+        if (choice == 1) {
+            cout << "Enter value: ";
+            cin >> value;
+            insertAtBegin(head, value);
+        } else if (choice == 2) {
+            deleteFromBegin(head);
+        } else if (choice == 3) {
+            display(head);
+        } else if (choice == 4) {
+            cout << "Count: " << countElements(head) << endl;
+        } else if (choice == 5) break;
+    }
+    return 0;
+}
