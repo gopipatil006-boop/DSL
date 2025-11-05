@@ -1,0 +1,98 @@
+class Node:
+    def _init_(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+class BST:
+    def _init_(self):
+        self.root = None
+
+    def insert(self, root, data):
+        if root is None:
+            return Node(data)
+        if data < root.data:
+            root.left = self.insert(root.left, data)
+        else:
+            root.right = self.insert(root.right, data)
+        return root
+
+    def search(self, root, key):
+        if root is None or root.data == key:
+            return root
+        if key < root.data:
+            return self.search(root.left, key)
+        return self.search(root.right, key)
+
+    def inorder(self, root):
+        if root:
+            self.inorder(root.left)
+            print(root.data, end=" ")
+            self.inorder(root.right)
+
+def naive_string_match(text, pattern):
+    n = len(text)
+    m = len(pattern)
+    positions = []
+    for i in range(n - m + 1):
+        if text[i:i + m] == pattern:
+            positions.append(i)
+    return positions
+
+def string_matching_menu():
+    text = input("Enter the text: ")
+    pattern = input("Enter the pattern: ")
+    result = naive_string_match(text, pattern)
+    if result:
+        print("Pattern found at indices:", result)
+    else:
+        print("Pattern not found in the text.")
+
+def bst_menu():
+    bst = BST()
+    root = None
+    while True:
+        print("\n--- Binary Search Tree Operations ---")
+        print("1. Insert")
+        print("2. Search")
+        print("3. Display (Inorder)")
+        print("4. Back to Main Menu")
+        ch = int(input("Enter your choice: "))
+        if ch == 1:
+            val = int(input("Enter value to insert: "))
+            root = bst.insert(root, val)
+        elif ch == 2:
+            key = int(input("Enter value to search: "))
+            res = bst.search(root, key)
+            if res:
+                print("Value found in BST.")
+            else:
+                print("Value not found.")
+        elif ch == 3:
+            print("BST Inorder Traversal:")
+            bst.inorder(root)
+            print()
+        elif ch == 4:
+            break
+        else:
+            print("Invalid choice!")
+
+def main():
+    while True:
+        print("\n======= MAIN MENU =======")
+        print("1. Naive String Matching Algorithm")
+        print("2. Binary Search Tree Operations")
+        print("3. Exit")
+        choice = int(input("Enter your choice: "))
+        if choice == 1:
+            string_matching_menu()
+        elif choice == 2:
+            bst_menu()
+        elif choice == 3:
+            print("Exiting program...")
+            break
+        else:
+            print("Invalid choice! Please try again.")
+
+if _name_ == "_main_":
+    main()
