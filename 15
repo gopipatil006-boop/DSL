@@ -1,0 +1,66 @@
+class Graph:
+    def _init_(self, vertices):
+        self.V = vertices
+        self.graph = []
+
+    def add_edge(self, u, v, w):
+        self.graph.append([u, v, w])
+
+    def find(self, parent, i):
+        if parent[i] == i:
+            return i
+        return self.find(parent, parent[i])
+
+    def union(self, parent, rank, x, y):
+        xroot = self.find(parent, x)
+        yroot = self.find(parent, y)
+        if rank[xroot] < rank[yroot]:
+            parent[xroot] = yroot
+        elif rank[xroot] > rank[yroot]:
+            parent[yroot] = xroot
+        else:
+            parent[yroot] = xroot
+            rank[xroot] += 1
+
+    def kruskal_mst(self):
+        result = []
+        i = 0
+        e = 0
+        self.graph = sorted(self.graph, key=lambda item: item[2])
+        parent = []
+        rank = []
+        for node in range(self.V):
+            parent.append(node)
+            rank.append(0)
+        while e < self.V - 1 and i < len(self.graph):
+            u, v, w = self.graph[i]
+            i += 1
+            x = self.find(parent, u)
+            y = self.find(parent, v)
+            if x != y:
+                e += 1
+                result.append([u, v, w])
+                self.union(parent, rank, x, y)
+        print("\nMinimum Spanning Tree (Kruskal's Algorithm):")
+        total = 0
+        for u, v, w in result:
+            print(f"{nodes[u]} -- {nodes[v]} = {w} m")
+            total += w
+        print("Total Distance of MST:", total, "m")
+
+
+n = int(input("Enter number of departments: "))
+nodes = []
+for i in range(n):
+    name = input(f"Enter name of department {i+1}: ")
+    nodes.append(name)
+
+g = Graph(n)
+print("\nEnter distance between departments (enter 0 if no direct path):")
+for i in range(n):
+    for j in range(i + 1, n):
+        w = int(input(f"Distance between {nodes[i]} and {nodes[j]}: "))
+        if w != 0:
+            g.add_edge(i, j, w)
+
+g.kruskal_mst()
