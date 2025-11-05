@@ -1,0 +1,80 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+void insertAtLast(Node* &head, int value) {
+    Node* newNode = new Node;
+    newNode->data = value;
+    newNode->next = nullptr;
+    if (head == nullptr) {
+        head = newNode;
+        return;
+    }
+    Node* temp = head;
+    while (temp->next != nullptr)
+        temp = temp->next;
+    temp->next = newNode;
+}
+
+void deleteFromLast(Node* &head) {
+    if (head == nullptr) return;
+    if (head->next == nullptr) {
+        delete head;
+        head = nullptr;
+        return;
+    }
+    Node* temp = head;
+    while (temp->next->next != nullptr)
+        temp = temp->next;
+    delete temp->next;
+    temp->next = nullptr;
+}
+
+void display(Node* head) {
+    Node* temp = head;
+    while (temp != nullptr) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+bool searchElement(Node* head, int key) {
+    Node* temp = head;
+    while (temp != nullptr) {
+        if (temp->data == key)
+            return true;
+        temp = temp->next;
+    }
+    return false;
+}
+
+int main() {
+    Node* head = nullptr;
+    int choice, value;
+    while (true) {
+        cout << "1. Insert at Last\n2. Delete from Last\n3. Display\n4. Search\n5. Exit\nEnter choice: ";
+        cin >> choice;
+        if (choice == 1) {
+            cout << "Enter value: ";
+            cin >> value;
+            insertAtLast(head, value);
+        } else if (choice == 2) {
+            deleteFromLast(head);
+        } else if (choice == 3) {
+            display(head);
+        } else if (choice == 4) {
+            cout << "Enter value to search: ";
+            cin >> value;
+            if (searchElement(head, value))
+                cout << "Element found\n";
+            else
+                cout << "Element not found\n";
+        } else if (choice == 5) break;
+    }
+    return 0;
+}
