@@ -1,0 +1,60 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+struct Student {
+    int id;
+    string name;
+    float cgpa;
+};
+
+void addStudents(Student* &students, int &n) {
+    cout << "Enter number of students: ";
+    cin >> n;
+    students = new Student[n];
+    for (int i = 0; i < n; i++) {
+        cout << "Enter ID, Name, CGPA: ";
+        cin >> students[i].id >> students[i].name >> students[i].cgpa;
+    }
+}
+
+int linearSearch(Student* students, int n, int key) {
+    for (int i = 0; i < n; i++)
+        if (students[i].id == key)
+            return i;
+    return -1;
+}
+
+int binarySearch(Student* students, int n, int key) {
+    int l = 0, r = n - 1;
+    while (l <= r) {
+        int mid = (l + r) / 2;
+        if (students[mid].id == key)
+            return mid;
+        else if (students[mid].id < key)
+            l = mid + 1;
+        else
+            r = mid - 1;
+    }
+    return -1;
+}
+
+int main() {
+    Student* students = nullptr;
+    int n;
+    addStudents(students, n);
+    sort(students, students + n, [](Student a, Student b) { return a.id < b.id; });
+    int choice, key;
+    cout << "1. Linear Search\n2. Binary Search\nEnter choice: ";
+    cin >> choice;
+    cout << "Enter ID to search: ";
+    cin >> key;
+    int index = (choice == 1) ? linearSearch(students, n, key) : binarySearch(students, n, key);
+    if (index != -1)
+        cout << "Found: " << students[index].id << " " << students[index].name << " " << students[index].cgpa << endl;
+    else
+        cout << "Record not found\n";
+    delete[] students;
+    return 0;
+}
