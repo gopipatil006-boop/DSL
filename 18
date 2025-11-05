@@ -1,0 +1,56 @@
+# Sort Online Orders by Delivery Time using Merge Sort
+
+def merge(a, lb, mid, ub):
+    i = lb
+    j = mid + 1
+    temp = []
+
+    while i <= mid and j <= ub:
+        if a[i] <= a[j]:
+            temp.append(a[i])
+            i += 1
+        else:
+            temp.append(a[j])
+            j += 1
+
+    # Copy remaining elements
+    while i <= mid:
+        temp.append(a[i])
+        i += 1
+
+    while j <= ub:
+        temp.append(a[j])
+        j += 1
+
+    # Copy back to original array
+    for k in range(len(temp)):
+        a[lb + k] = temp[k]
+
+
+def mergesort(a, lb, ub):
+    if lb < ub:
+        mid = (lb + ub) // 2
+        mergesort(a, lb, mid)      #this breaks the array of left 
+        mergesort(a, mid + 1, ub)   #this breaks the arry of right
+        merge(a, lb, mid, ub)       #this calls the merge for merging 
+
+
+# ---- Main Program ----
+def main():
+    n = int(input("Enter total number of orders: "))
+    a = []
+
+    print("Enter estimated delivery times (in minutes):")
+    for i in range(n):
+        time = int(input(f"Order {i+1}: "))
+        a.append(time)
+
+    mergesort(a, 0, n - 1)
+
+    print("\nSorted delivery times (quicker deliveries first):")
+    for t in a:
+        print(t, end=" ")
+
+
+# Run program
+main()
