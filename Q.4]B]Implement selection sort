@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    int id;
+    string name;
+    float cgpa;
+};
+
+void addStudents(Student* &students, int &n) {
+    cout << "Enter number of students: ";
+    cin >> n;
+    students = new Student[n];
+    for (int i = 0; i < n; i++) {
+        cout << "Enter ID, Name, CGPA: ";
+        cin >> students[i].id >> students[i].name >> students[i].cgpa;
+    }
+}
+
+void selectionSortByCGPA(Student* students, int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < n; j++)
+            if (students[j].cgpa < students[minIndex].cgpa)
+                minIndex = j;
+        swap(students[i], students[minIndex]);
+    }
+}
+
+void displayStudents(Student* students, int n) {
+    for (int i = 0; i < n; i++)
+        cout << students[i].id << " " << students[i].name << " " << students[i].cgpa << endl;
+}
+
+int main() {
+    Student* students = nullptr;
+    int n;
+    addStudents(students, n);
+    selectionSortByCGPA(students, n);
+    cout << "\nSorted Student List (by CGPA):\n";
+    displayStudents(students, n);
+    delete[] students;
+    return 0;
+}
