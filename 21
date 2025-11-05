@@ -1,0 +1,65 @@
+import time
+from collections import deque
+import os
+
+def print_maze(maze, path=[]):
+    os.system('cls' if os.name == 'nt' else 'clear')
+    for r in range(len(maze)):
+        for c in range(len(maze[0])):
+            if (r, c) in path:
+                print("P", end=" ")
+            elif maze[r][c] == 1:
+                print("#", end=" ")
+            else:
+                print(".", end=" ")
+        print()
+    time.sleep(0.3)
+
+def bfs(maze, start, goal):
+    rows, cols = len(maze), len(maze[0])
+    queue = deque([start])
+    visited = {start: None}
+
+    while queue:
+        current = queue.popleft()
+        print_maze(maze, list(visited.keys()))
+        if current == goal:
+            break
+        r, c = current
+        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and maze[nr][nc] == 0:
+                if (nr, nc) not in visited:
+                    visited[(nr, nc)] = current
+                    queue.append((nr, nc))
+
+    path = []
+    if goal in visited:
+        node = goal
+        while node is not None:
+            path.append(node)
+            node = visited[node]
+        path.reverse()
+    return path
+
+print("Maze Navigation System using BFS")
+rows = int(input("Enter number of rows: "))
+cols = int(input("Enter number of columns: "))
+
+maze = []
+print("Enter maze row by row (0 = open, 1 = wall):")
+for i in range(rows):
+    maze.append(list(map(int, input(f"Row {i+1}: ").split())))
+
+print("Enter start coordinates (row col):")
+start = tuple(map(int, input().split()))
+print("Enter goal coordinates (row col):")
+goal = tuple(map(int, input().split()))
+
+path = bfs(maze, start, goal)
+
+if path:
+    print("\n✅ Path found:")
+    print(" -> ".join(map(str, path)))
+else:
+    print("\n❌ No path found.")
